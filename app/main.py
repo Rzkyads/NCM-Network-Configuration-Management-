@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.base import Base
 from app.db.session import engine
-from app.api.v1 import devices, backups
+from app.api.v1 import devices, backups, settings, auth, audit
+from app.models import audit as audit_model
 
 # Membuat tabel database jika belum ada
 Base.metadata.create_all(bind=engine)
@@ -24,6 +25,10 @@ app.add_middleware(
 
 app.include_router(devices.router, prefix="/api/v1/devices", tags=["Devices"])
 app.include_router(backups.router, prefix="/api/v1/backups", tags=["Backups"])
+app.include_router(settings.router, prefix="/api/v1/settings/telegram", tags=["Settings"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
+app.include_router(audit.router, prefix="/api/v1/audit", tags=["Audit"])
+
 
 @app.get("/")
 def root():

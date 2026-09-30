@@ -1,6 +1,6 @@
 import traceback
 from datetime import datetime
-from croniter import croniter
+from croniter import croniter, CroniterBadCronError
 from celery import Celery
 from app.core.config import settings
 from app.db.session import SessionLocal
@@ -79,13 +79,17 @@ def check_scheduled_backups():
             if not device.cron_schedule:
                 continue
             
-            # Evaluasi jadwal cron
-            cron = croniter(device.cron_schedule, now)
-            prev_time = cron.get_prev(datetime)
-            
-            # Jika eksekusi dalam 60 detik terakhir, picu backup
-            if 0 <= (now - prev_time).total_seconds() < 60:
-                run_device_backup.delay(str(device.id))
+            try:
+                # Evaluasi jadwal cron
+                cron = croniter(device.cron_schedule, now)
+                prev_time = cron.get_prev(datetime)
+                
+                # Jika eksekusi dalam 60 detik terakhir, picu backup
+                if 0 <= (now - prev_time).total_seconds() < 60:
+                    run_device_backup.delay(str(device.id))
+            except CroniterBadCronError:
+                print(f"Format cron tidak valid untuk device ID: {device.id}. Mengabaikan...")
+                continue
     finally:
         db.close()
 
