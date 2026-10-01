@@ -1,0 +1,16 @@
+name: Belajar CI Sederhana
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cek kode repository
+        uses: actions/checkout@v4
+
+      - name: Jalankan tes cetak teks
+        run: |
+          echo "Halo Mas Rizky! Pipeline CI/CD pertama berhasil berjalan di branch dev"
