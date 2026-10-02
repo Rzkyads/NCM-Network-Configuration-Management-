@@ -19,9 +19,9 @@ def create_device(
     db: Session = Depends(get_db), 
     current_user: dict = Depends(require_role("admin"))
 ):
-    db_device = db.query(Device).filter(Device.ip_address == device.ip_address).first()
+    db_device = db.query(Device).filter(Device.ip_address == device.ip_address, Device.port == device.port).first()
     if db_device:
-        raise HTTPException(status_code=400, detail="IP Address sudah terdaftar di sistem")
+        raise HTTPException(status_code=400, detail="IP Address dan Port tersebut sudah terdaftar di sistem")
     
     device_data = device.model_dump()
     raw_password = device_data.pop("password")

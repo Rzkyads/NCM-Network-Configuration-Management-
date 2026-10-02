@@ -26,12 +26,18 @@ def get_netmiko_device_type(vendor: str):
     else:
         return "autodetect"
 
-def backup_device_cli(device_ip: str, port: int, vendor: str, username: str, encrypted_pass: str, hostname: str):
+def backup_device_cli(device_ip: str, port: int, vendor: str, username: str, encrypted_pass: str, hostname: str, netmiko_driver: str = None):
     start_time = time.time()
     password = decrypt_password(encrypted_pass)
     
+    # Gunakan netmiko_driver dari database jika ada, jika tidak pakai fungsi heuristik
+    if netmiko_driver:
+        device_type = netmiko_driver
+    else:
+        device_type = get_netmiko_device_type(vendor)
+    
     device_params = {
-        'device_type': get_netmiko_device_type(vendor),
+        'device_type': device_type,
         'ip': device_ip,
         'username': username,
         'password': password,

@@ -1,0 +1,39 @@
+name: Cyaneum NCM Auto-Deployment
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Cek kode repository & Tarik pembaruan terbaru
+        run: |
+          cd /opt/NCM-Network-Configuration-Management-
+          git fetch origin dev
+          git reset --hard origin/dev
+          git pull origin dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instal Dependensi Backend & Build Frontend
+        run: |
+          cd /opt/NCM-Network-Configuration-Management-
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Restart Layanan FastAPI & Celery Worker
+        run: |
+          sudo systemctl restart cyaneum-api.service
+          sudo systemctl restart cyaneum-celery.service
+          echo "Deployment otomatis ke server berhasil!"
