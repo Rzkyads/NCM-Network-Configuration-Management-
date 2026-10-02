@@ -8,6 +8,8 @@ class DeviceBase(BaseModel):
     port: int = 22
     vendor: str
     device_type: str
+    os_version: Optional[str] = None
+    netmiko_driver: Optional[str] = None
     username: str
     cron_schedule: str
     is_active: bool = True

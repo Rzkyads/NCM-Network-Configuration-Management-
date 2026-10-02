@@ -46,7 +46,8 @@ def run_device_backup(device_id: str):
                 vendor=device.vendor,
                 username=device.username,
                 encrypted_pass=device.password_enc,
-                hostname=device.hostname
+                hostname=device.hostname,
+                netmiko_driver=device.netmiko_driver
             )
 
         status = "success" if success else "failed"

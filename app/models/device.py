@@ -14,6 +14,8 @@ class Device(Base):
     port = Column(Integer, default=22, nullable=False)
     vendor = Column(String, nullable=False)  # mikrotik, ruijie, omada_controller
     device_type = Column(String, nullable=False)  # router, switch, access_point
+    os_version = Column(String, nullable=True)     # v7.x, IOS 15.2, dll
+    netmiko_driver = Column(String, nullable=True)  # mikrotik_routeros, cisco_ios, dll
     username = Column(String, nullable=False)
     password_enc = Column(String, nullable=False)
     cron_schedule = Column(String, default="0 2 * * *")
