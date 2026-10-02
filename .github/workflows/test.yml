@@ -1,16 +1,30 @@
-name: Belajar CI Sederhana
+name: Cyaneum NCM Auto-Deployment
 
 on:
   push:
     branches: [ dev ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cek kode repository
-        uses: actions/checkout@v4
+  deploy:
+    runs-on: self-hosted
 
-      - name: Jalankan tes cetak teks
+    steps:
+      - name: Cek kode repository & Tarik pembaruan terbaru
         run: |
-          echo "Halo Mas Rizky! Pipeline CI/CD pertama berhasil berjalan di branch dev"
+          cd /home/rzkyads/NCM-Network-Configuration-Management-
+          git pull origin dev
+
+      - name: Instal Dependensi Backend & Build Frontend
+        run: |
+          cd /home/rzkyads/NCM-Network-Configuration-Management-
+          source venv/bin/activate
+          pip install -r requirements.txt
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Restart Layanan FastAPI & Celery Worker
+        run: |
+          sudo systemctl restart cyaneum-api.service
+          sudo systemctl restart cyaneum-celery.service
+          echo "Deployment otomatis ke server berhasil!"
