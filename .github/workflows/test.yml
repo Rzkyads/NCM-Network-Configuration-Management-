@@ -23,6 +23,13 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
+
+          # Menginstal Node.js versi LTS secara otomatis jika belum ada di runner
+          if ! command -v node &> /dev/null; then
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          fi
+
           cd frontend
           npm install
           npm run build
