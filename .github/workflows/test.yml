@@ -12,6 +12,8 @@ jobs:
       - name: Cek kode repository & Tarik pembaruan terbaru
         run: |
           cd /opt/NCM-Network-Configuration-Management-
+          git fetch origin dev
+          git reset --hard origin/dev
           git pull origin dev
 
       - name: Instal Dependensi Backend & Build Frontend
