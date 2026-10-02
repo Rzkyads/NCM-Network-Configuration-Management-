@@ -11,12 +11,12 @@ jobs:
     steps:
       - name: Cek kode repository & Tarik pembaruan terbaru
         run: |
-          cd /home/rzkyads/NCM-Network-Configuration-Management-
+          cd /opt/NCM-Network-Configuration-Management-
           git pull origin dev
 
       - name: Instal Dependensi Backend & Build Frontend
         run: |
-          cd /home/rzkyads/NCM-Network-Configuration-Management-
+          cd /opt/NCM-Network-Configuration-Management-
           source venv/bin/activate
           pip install -r requirements.txt
           cd frontend
