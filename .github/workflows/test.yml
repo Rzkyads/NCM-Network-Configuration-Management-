@@ -19,9 +19,7 @@ jobs:
       - name: Instal Dependensi Backend & Build Frontend
         run: |
           cd /opt/NCM-Network-Configuration-Management-
-          if [ ! -d "venv" ]; then
-            python3 -m venv venv
-          fi
+          python3 -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
