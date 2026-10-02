@@ -16,6 +16,11 @@ jobs:
           git reset --hard origin/dev
           git pull origin dev
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Instal Dependensi Backend & Build Frontend
         run: |
           cd /opt/NCM-Network-Configuration-Management-
@@ -23,13 +28,6 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
-
-          # Menginstal Node.js versi LTS secara otomatis jika belum ada di runner
-          if ! command -v node &> /dev/null; then
-            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-          fi
-
           cd frontend
           npm install
           npm run build
